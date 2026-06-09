@@ -1,49 +1,18 @@
-import axios from 'axios';
+import axios from "axios";
 
-type NotificationType = 'placement' | 'result' | 'event';
+const TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJNYXBDbGFpbXMiOnsiYXVkIjoiaHR0cDovLzIwLjI0NC41Ni4xNDQvZXZhbHVhdGlvbi1zZXJ2aWNlIiwiZW1haWwiOiJrYXJ0aWsuMjNiMDEwMTAxN0BhYmVzLmFjLmluIiwiZXhwIjoxNzgwOTg4ODMwLCJpYXQiOjE3ODA5ODc5MzAsImlzcyI6IkFmZm9yZCBNZWRpY2FsIFRlY2hub2xvZ2llcyBQcml2YXRlIExpbWl0ZWQiLCJqdGkiOiI4MzExOTJjNC00N2Y3LTRhYWMtYjM0Zi1mNDM4YTY0OGY0NDQiLCJsb2NhbGUiOiJlbi1JTiIsIm5hbWUiOiJrYXJ0aWsgY2hhdWRoYXJ5Iiwic3ViIjoiY2RhNTQyMWYtYmUzNS00MWY1LWI1ZjQtNjMxNWVlYjg4ZWExIn0sImVtYWlsIjoia2FydGlrLjIzYjAxMDEwMTdAYWJlcy5hYy5pbiIsIm5hbWUiOiJrYXJ0aWsgY2hhdWRoYXJ5Iiwicm9sbE5vIjoiMjMwMDMyMDEwMDExNCIsImFjY2Vzc0NvZGUiOiJjWHVxaHQiLCJjbGllbnRJRCI6ImNkYTU0MjFmLWJlMzUtNDFmNS1iNWY0LTYzMTVlZWI4OGVhMSIsImNsaWVudFNlY3JldCI6ImN4VlBkdW1USlJ3cldOSkIifQ.OVO9eRsmW3E3lnscjrKs-G7gw-WZr-hxOr8i5UO9cjQ";
 
-interface Notification {
-    id: number;
-    type: NotificationType;
-    message: string;
-    timestamp: string;
-}
-
-const PRIORITY: Record<NotificationType, number> = {
-    placement: 1,
-    result: 2,
-    event: 3
-};
-
-async function getTopNotifications(){
-    try {
-        const response = await axios.get("http://4.224.186.213/evaluation-service/notifications");
-        console.log(response.data);
-    } catch (error: any) {
-        console.log(error.response?.status);
-        console.log(error.response?.data);
+async function getNotifications() {
+  const response = await axios.get(
+    "http://4.224.186.213/evaluation-service/notifications",
+    {
+      headers: {
+        Authorization: `Bearer ${TOKEN}`,
+      },
     }
-    // try{
-    //     const response = await axios.get<{ notifications: Notification[] }>(
-    //         "http://4.224.186.213/evaluation-service/notifications"
-    //     );
-    //     const notifications: Notification[] = response.data.notifications;
-    //     const sortedNotifications = notifications.sort((a, b) => {
-    //         const priorityDiff = PRIORITY[b.type] - PRIORITY[a.type];
-    //         if(priorityDiff !== 0){
-    //             return priorityDiff;
-    //         }
-    //         return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
+  );
 
-    //     });
-    //     const top10 = sortedNotifications.slice(0, 10);
-    //     console.log("\ntop10\n");
-    //     top10.forEach((item,index) => {
-    //         console.log(`${index + 1}. ${item.message} (Type: ${item.type}, Timestamp: ${item.timestamp})`);
-    //     });
-    // }catch(error){
-    //     console.error("Error fetching notifications:", error);
-    // }
+  console.log(response.data);
 }
 
-getTopNotifications();
+getNotifications();
