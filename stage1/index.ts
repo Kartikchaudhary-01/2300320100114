@@ -16,27 +16,34 @@ const PRIORITY: Record<NotificationType, number> = {
 };
 
 async function getTopNotifications(){
-    try{
-        const response = await axios.get<{ notifications: Notification[] }>(
-            "http://4.224.186.213/evaluation-service/notifications"
-        );
-        const notifications: Notification[] = response.data.notifications;
-        const sortedNotifications = notifications.sort((a, b) => {
-            const priorityDiff = PRIORITY[b.type] - PRIORITY[a.type];
-            if(priorityDiff !== 0){
-                return priorityDiff;
-            }
-            return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
-
-        });
-        const top10 = sortedNotifications.slice(0, 10);
-        console.log("\ntop10\n");
-        top10.forEach((item,index) => {
-            console.log(`${index + 1}. ${item.message} (Type: ${item.type}, Timestamp: ${item.timestamp})`);
-        });
-    }catch(error){
-        console.error("Error fetching notifications:", error);
+    try {
+        const response = await axios.get("http://4.224.186.213/evaluation-service/notifications");
+        console.log(response.data);
+    } catch (error: any) {
+        console.log(error.response?.status);
+        console.log(error.response?.data);
     }
+    // try{
+    //     const response = await axios.get<{ notifications: Notification[] }>(
+    //         "http://4.224.186.213/evaluation-service/notifications"
+    //     );
+    //     const notifications: Notification[] = response.data.notifications;
+    //     const sortedNotifications = notifications.sort((a, b) => {
+    //         const priorityDiff = PRIORITY[b.type] - PRIORITY[a.type];
+    //         if(priorityDiff !== 0){
+    //             return priorityDiff;
+    //         }
+    //         return new Date(b.timestamp).getTime() - new Date(a.timestamp).getTime();
+
+    //     });
+    //     const top10 = sortedNotifications.slice(0, 10);
+    //     console.log("\ntop10\n");
+    //     top10.forEach((item,index) => {
+    //         console.log(`${index + 1}. ${item.message} (Type: ${item.type}, Timestamp: ${item.timestamp})`);
+    //     });
+    // }catch(error){
+    //     console.error("Error fetching notifications:", error);
+    // }
 }
 
 getTopNotifications();
